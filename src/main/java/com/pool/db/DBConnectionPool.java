@@ -8,16 +8,16 @@ package com.pool.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author eliud
  */
-@Slf4j
 public class DBConnectionPool extends PoolBase<Connection> {
 
-    private String dsn, usr, pwd;
+    private final String dsn;
+    private final String usr;
+    private final String pwd;
 
     public DBConnectionPool(final String driver,
             final String dsn,
