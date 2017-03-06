@@ -21,6 +21,7 @@ import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
@@ -31,6 +32,10 @@ import java.util.concurrent.Executor;
 public class CachedConnection implements Connection {
 
     private Connection c;
+
+    public CachedConnection(Connection c) {
+        this.c = c;
+    }
 
     @Override
     public Statement createStatement() throws SQLException {
@@ -300,6 +305,29 @@ public class CachedConnection implements Connection {
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        return c.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CachedConnection other = (CachedConnection) obj;
+        if (!Objects.equals(this.c, other.c)) {
+            return false;
+        }
+        return true;
     }
 
 }

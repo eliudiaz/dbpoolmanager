@@ -8,36 +8,62 @@ package com.pool.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  *
  * @author eliud
  */
-public class DBConnectionPool extends PoolBase<Connection> {
+public class DBConnectionPool extends PoolBase<CachedConnection> {
 
     private final String dsn;
     private final String usr;
     private final String pwd;
 
-    public DBConnectionPool(final String driver,
-            final String dsn,
-            final String usr,
-            final String pwd) {
-        super();
+    public DBConnectionPool(
+            String driver, String dsn, String usr, String pwd,
+            Integer maxConnections, Integer minConnnections) {
+        super(maxConnections, minConnnections);
         try {
             Class.forName(driver).newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace(System.err);
         }
         this.dsn = dsn;
         this.usr = usr;
         this.pwd = pwd;
+        PoolBase.initer = new InitializerProcess<CachedConnection>(DBConnectionPool.this, minConnnections);
+    }
+
+    private SQLException throwErrorGettingConnectionException() {
+        //                    log_warn("Error getting connection", ex);
+        return new SQLException("Error getting connection!");
+    }
+
+    public Connection getConnection() throws SQLException {
+        try {
+            return Optional
+                    .ofNullable(super.checkOut())
+                    .orElseThrow(this::throwErrorGettingConnectionException);
+
+        } catch (Exception ex) {
+//            log_warn("Error getting connection", ex);
+            if (!(ex instanceof SQLException)) {                
+                Throwable t = ex.getCause();
+                while (t != null) {
+//                    log_warn("Error getting connection", ex);
+                    t = t.getCause();
+                }
+                throw new SQLException(ex.getMessage());
+            }
+            throw ex;
+        }
     }
 
     @Override
-    protected Connection create() {
+    protected CachedConnection create() {
         try {
-            return (DriverManager.getConnection(dsn, usr, pwd));
+            return new CachedConnection(DriverManager.getConnection(dsn, usr, pwd));
         } catch (SQLException e) {
             e.printStackTrace();
             return (null);
@@ -45,7 +71,7 @@ public class DBConnectionPool extends PoolBase<Connection> {
     }
 
     @Override
-    public void expire(Connection o) {
+    public void expire(CachedConnection o) {
         try {
             ((Connection) o).close();
         } catch (SQLException e) {
@@ -54,7 +80,7 @@ public class DBConnectionPool extends PoolBase<Connection> {
     }
 
     @Override
-    public boolean validate(Connection o) {
+    public boolean validate(CachedConnection o) {
         try {
             return (!((Connection) o).isClosed());
         } catch (SQLException e) {
