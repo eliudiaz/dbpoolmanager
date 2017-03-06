@@ -8,6 +8,7 @@ package com.pool.db;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import lombok.Getter;
 
 /**
  *
@@ -16,9 +17,12 @@ import java.util.Map;
  */
 public abstract class PoolBase<T> {
 
+    @Getter
     private final long expirationTime;
     private final Map<T, Long> locked, unlocked;
+    @Getter
     private final Integer maxSize;
+    @Getter
     private final Integer minSize;
     public static InitializerProcess initer;
 
@@ -86,18 +90,6 @@ public abstract class PoolBase<T> {
     public synchronized void checkIn(T t) {
         locked.remove(t);
         unlocked.put(t, System.currentTimeMillis());
-    }
-
-    public Integer getMaxSize() {
-        return maxSize;
-    }
-
-    public Integer getMinSize() {
-        return minSize;
-    }
-
-    public long getExpirationTime() {
-        return expirationTime;
     }
 
 }
