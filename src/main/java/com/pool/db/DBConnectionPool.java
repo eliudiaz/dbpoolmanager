@@ -48,7 +48,7 @@ public class DBConnectionPool extends PoolBase<CachedConnection> {
 
         } catch (Exception ex) {
 //            log_warn("Error getting connection", ex);
-            if (!(ex instanceof SQLException)) {                
+            if (!(ex instanceof SQLException)) {
                 Throwable t = ex.getCause();
                 while (t != null) {
 //                    log_warn("Error getting connection", ex);
