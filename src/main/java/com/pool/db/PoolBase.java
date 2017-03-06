@@ -6,7 +6,6 @@
 package com.pool.db;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public abstract class PoolBase<T> {
 
     public PoolBase(Integer maxSize, Integer minSize) {
         expirationTime = 30000; //default time
-        locked = new Hashtable<>();
+        locked = new HashMap<>();
         unlocked = new HashMap<>();
         this.maxSize = maxSize;
         this.minSize = minSize;
@@ -33,7 +32,7 @@ public abstract class PoolBase<T> {
 
     public PoolBase() {
         expirationTime = 30000; //default time
-        locked = new Hashtable<>();
+        locked = new HashMap<>();
         unlocked = new HashMap<>();
         this.maxSize = 10;
         this.minSize = 5;
