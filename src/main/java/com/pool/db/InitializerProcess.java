@@ -12,21 +12,15 @@ public class InitializerProcess<T> extends Thread {
 
     private final PoolBase<T> pool;
 
-    private final int num;
-    /**
-     * Flag init thread has been stopped.
-     */
+    private final int targetCount;
     private volatile boolean stopped = false;
-    /**
-     * determining init thread has been completed working.
-     */
     private volatile boolean done = false;
 
     public InitializerProcess(PoolBase<T> pool, int num) {
         assert pool != null;
         assert num >= 0 && (num <= pool.getMaxSize());
         this.pool = pool;
-        this.num = pool.getMaxSize();
+        this.targetCount = num;
         this.setDaemon(true);
     }
 
@@ -50,7 +44,7 @@ public class InitializerProcess<T> extends Thread {
                     stopped = true;
                     continue;
                 }
-                if (count >= num || (pool.getMaxSize() > 0 && pool.getSize() >= pool.getMaxSize())) {
+                if (count >= targetCount || (pool.getMaxSize() > 0 && pool.getSize() >= pool.getMaxSize())) {
                     done = true;
                 }
                 if (!stopped && !done) {
