@@ -1,10 +1,13 @@
 package com.pool.db;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  *
  * @author eliud
  * @param <T>
  */
+@Slf4j
 public class InitializerProcess<T> extends Thread {
 
     private final PoolBase<T> pool;
@@ -35,9 +38,7 @@ public class InitializerProcess<T> extends Thread {
     }
 
     /**
-     * Populates the pool with the given number of items. If the pool already
-     * contains used items then they will be counted towards the number created
-     * by this method.
+     * Add new items to current pool
      */
     @Override
     public void run() {
@@ -63,20 +64,20 @@ public class InitializerProcess<T> extends Thread {
 //                            free.add(new TimeWrapper<>(o, pool.idleTimeout));
 //                            pool.notifyAll();
                             count++;
-//                            log_debug("Initialized new item in pool");
+                            log.debug("Initialized new item in pool");
                         }
                     } catch (Exception ex) {
-//                        log_wasrn("Unable to initialize items in pool", ex);
+                        log.warn("Unable to initialize items in pool", ex);
                         stopped = true;
                     }
                 }
             }
         }
         synchronized (pool) {
-//            if (!stopped && done) {
-//                log_debug("Initialized pool with " + count + (count != 1 ? " new items" : " new item"));
+            if (!stopped && done) {
+                log.debug("Initialized pool with " + count + (count != 1 ? " new items" : " new item"));
 //                firePoolEvent(ObjectPoolEvent.Type.INIT_COMPLETED);
-//            }
+            }
             if (pool.initer != Thread.currentThread()) {
                 pool.initer = null;
             }
