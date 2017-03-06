@@ -49,7 +49,7 @@ public class InitializerProcess<T> extends Thread {
                     stopped = true;
                     continue;
                 }
-                if (count >= num || pool.getFreeCount() >= num) {
+                if (count >= num || (pool.getMaxSize() > 0 && pool.getSize() >= pool.getMaxSize())) {
                     done = true;
                 }
                 if (!stopped && !done) {

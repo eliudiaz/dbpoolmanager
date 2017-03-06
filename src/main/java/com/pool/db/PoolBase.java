@@ -76,6 +76,10 @@ public abstract class PoolBase<T> {
         return null;
     }
 
+    public int getSize() {
+        return unlocked.size() + locked.size();
+    }
+
     public int getFreeCount() {
         return unlocked.size();
     }
