@@ -10,18 +10,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author eliud
  */
-public class DBConnectionPool extends PoolBase<CachedConnection> {
+@Slf4j
+public class JDBConnectionPool extends PoolBase<CachedConnection> {
 
     private final String dsn;
     private final String usr;
     private final String pwd;
 
-    public DBConnectionPool(
+    public JDBConnectionPool(
             String driver, String dsn, String usr, String pwd,
             Integer maxPoolSize, Integer minPoolSize) {
         super(maxPoolSize, minPoolSize);
@@ -35,12 +37,12 @@ public class DBConnectionPool extends PoolBase<CachedConnection> {
         this.usr = usr;
         this.pwd = pwd;
         if (minPoolSize > 0) {
-            PoolBase.initer = new InitializerProcess<CachedConnection>(DBConnectionPool.this, minPoolSize);
+            PoolBase.initer = new InitializerProcess<CachedConnection>(JDBConnectionPool.this, minPoolSize);
         }
     }
 
     private SQLException throwErrorGettingConnectionException() {
-        //                    log_warn("Error getting connection", ex);
+        log.warn("Error getting connection");
         return new SQLException("Error getting connection!");
     }
 
@@ -51,11 +53,11 @@ public class DBConnectionPool extends PoolBase<CachedConnection> {
                     .orElseThrow(this::throwErrorGettingConnectionException);
 
         } catch (Exception ex) {
-//            log_warn("Error getting connection", ex);
+            log.warn("Error getting connection", ex);
             if (!(ex instanceof SQLException)) {
                 Throwable t = ex.getCause();
                 while (t != null) {
-//                    log_warn("Error getting connection", ex);
+                    log.warn("Error getting connection", ex);
                     t = t.getCause();
                 }
                 throw new SQLException(ex.getMessage());
