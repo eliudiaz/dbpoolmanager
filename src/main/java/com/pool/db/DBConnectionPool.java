@@ -16,11 +16,11 @@ import java.util.Optional;
  * @author eliud
  */
 public class DBConnectionPool extends PoolBase<CachedConnection> {
-    
+
     private final String dsn;
     private final String usr;
     private final String pwd;
-    
+
     public DBConnectionPool(
             String driver, String dsn, String usr, String pwd,
             Integer maxPoolSize, Integer minPoolSize) {
@@ -34,20 +34,22 @@ public class DBConnectionPool extends PoolBase<CachedConnection> {
         this.dsn = dsn;
         this.usr = usr;
         this.pwd = pwd;
-        PoolBase.initer = new InitializerProcess<CachedConnection>(DBConnectionPool.this, minPoolSize);
+        if (minPoolSize > 0) {
+            PoolBase.initer = new InitializerProcess<CachedConnection>(DBConnectionPool.this, minPoolSize);
+        }
     }
-    
+
     private SQLException throwErrorGettingConnectionException() {
         //                    log_warn("Error getting connection", ex);
         return new SQLException("Error getting connection!");
     }
-    
+
     public Connection getConnection() throws SQLException {
         try {
             return Optional
                     .ofNullable(super.checkOut())
                     .orElseThrow(this::throwErrorGettingConnectionException);
-            
+
         } catch (Exception ex) {
 //            log_warn("Error getting connection", ex);
             if (!(ex instanceof SQLException)) {
@@ -61,7 +63,7 @@ public class DBConnectionPool extends PoolBase<CachedConnection> {
             throw ex;
         }
     }
-    
+
     @Override
     protected CachedConnection create() {
         try {
@@ -71,20 +73,20 @@ public class DBConnectionPool extends PoolBase<CachedConnection> {
             return (null);
         }
     }
-    
+
     @Override
     public void expire(CachedConnection o) {
         try {
-            ((Connection) o).close();
+            o.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public boolean validate(CachedConnection o) {
         try {
-            return (!((Connection) o).isClosed());
+            return (!o.isClosed());
         } catch (SQLException e) {
             e.printStackTrace();
             return (false);
