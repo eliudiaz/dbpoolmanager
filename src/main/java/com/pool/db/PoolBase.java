@@ -24,7 +24,7 @@ public abstract class PoolBase<T> {
     private final Integer maxSize;
     @Getter
     private final Integer minSize;
-    public static InitializerProcess initer;
+    public static PoolInitializer initer;
 
     public PoolBase(Integer maxSize, Integer minSize) {
         expirationTime = 30000; //default time

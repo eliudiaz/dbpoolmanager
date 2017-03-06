@@ -37,7 +37,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         this.usr = usr;
         this.pwd = pwd;
         if (minPoolSize > 0) {
-            PoolBase.initer = new InitializerProcess<CachedConnection>(JDBConnectionPool.this, minPoolSize);
+            PoolBase.initer = new PoolInitializer<CachedConnection>(JDBConnectionPool.this, minPoolSize);
         }
     }
 

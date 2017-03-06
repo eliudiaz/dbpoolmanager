@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * @param <T>
  */
 @Slf4j
-public class InitializerProcess<T> extends Thread {
+public class PoolInitializer<T> extends Thread {
 
     private final PoolBase<T> pool;
 
@@ -16,7 +16,7 @@ public class InitializerProcess<T> extends Thread {
     private volatile boolean stopped = false;
     private volatile boolean done = false;
 
-    public InitializerProcess(PoolBase<T> pool, int num) {
+    public PoolInitializer(PoolBase<T> pool, int num) {
         assert pool != null;
         assert num >= 0 && (num <= pool.getMaxSize());
         this.pool = pool;
