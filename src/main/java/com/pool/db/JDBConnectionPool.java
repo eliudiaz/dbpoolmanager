@@ -71,7 +71,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         try {
             return new CachedConnection(DriverManager.getConnection(dsn, usr, pwd));
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.debug("error creating!!", e);
             return (null);
         }
     }
@@ -81,7 +81,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         try {
             o.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.debug("error expiring!!", e);
         }
     }
 
@@ -90,7 +90,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         try {
             return (!o.isClosed());
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.debug("error validating!!", e);
             return (false);
         }
     }

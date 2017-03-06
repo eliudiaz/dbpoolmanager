@@ -79,17 +79,17 @@ public abstract class PoolBase<T> {
         return null;
     }
 
+    public synchronized void checkIn(T t) {
+        locked.remove(t);
+        unlocked.put(t, System.currentTimeMillis());
+    }
+
     public int getSize() {
         return unlocked.size() + locked.size();
     }
 
     public int getFreeCount() {
         return unlocked.size();
-    }
-
-    public synchronized void checkIn(T t) {
-        locked.remove(t);
-        unlocked.put(t, System.currentTimeMillis());
     }
 
 }
