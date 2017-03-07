@@ -6,6 +6,9 @@
 package com.pool.jdbc;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,20 +18,31 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  *
- * @author edcracken
  */
 @RunWith(PowerMockRunner.class)
 public class JDBCPoolTest {
 
-    @PrepareForTest({SQLUtil.class})
+    @PrepareForTest({JDBCUtil.class})
     @Test
-    public void mockStaticClassTest() {
+    public void maxConnectionsValidation() {
+
+        mockStaticClasses();
+        JDBCPool pool = JDBCPool.build("", "", "", "", 0, 2);
+        while (true) {
+            try {
+                pool.getConnection();
+            } catch (SQLException ex) {
+            }
+        }
+    }
+
+    private void mockStaticClasses() {
         Connection c = PowerMockito.mock(Connection.class);
-        PowerMockito.mockStatic(SQLUtil.class);
-        PowerMockito.when(SQLUtil.createConnection("",
+        PowerMockito.mockStatic(JDBCUtil.class);
+        PowerMockito.when(JDBCUtil.createConnection("",
                 "",
                 "")).thenReturn(c);
-        Assert.assertNotNull(SQLUtil.createConnection("", "", ""));
+        Assert.assertNotNull(JDBCUtil.createConnection("", "", ""));
     }
 
 }

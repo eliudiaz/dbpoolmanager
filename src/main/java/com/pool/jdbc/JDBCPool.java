@@ -54,8 +54,8 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
             Long expirationTime,
             Long maxIddleTime) {
         super(maxPoolSize, minPoolSize, expirationTime);
-        try {            
-            Class.forName(driver).newInstance();
+        try {
+            JDBCUtil.validateDriverClass(driver);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace(System.err);
             throw new PoolInitializationException(e.getMessage(), e);
@@ -100,8 +100,8 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
     @Override
     protected JDBCConnection create() {
         try {
-            return new JDBCConnection(DriverManager
-                    .getConnection(dsn, usr, pwd),
+            return new JDBCConnection(
+                    JDBCUtil.createConnection(dsn, usr, pwd),
                     this, maxIddleTime);
         } catch (SQLException e) {
             log.debug("error creating!!", e);
