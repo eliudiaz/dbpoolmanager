@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  *
- * @author eliud
  */
 @Slf4j
 public class JDBConnectionPool extends PoolBase<CachedConnection> {

@@ -28,7 +28,6 @@ import java.util.concurrent.Executor;
 
 /**
  *
- * @author eliud
  */
 public class CachedConnection implements Connection, PoolItem {
 

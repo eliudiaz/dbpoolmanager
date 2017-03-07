@@ -7,7 +7,6 @@ package com.pool.api.exception;
 
 /**
  *
- * @author eliud
  */
 public class PoolInitializationException extends RuntimeException {
 

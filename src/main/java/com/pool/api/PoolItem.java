@@ -7,7 +7,6 @@ package com.pool.api;
 
 /**
  *
- * @author eliu
  */
 public interface PoolItem {
 

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  *
- * @author eliud
  * @param <T>
  */
 @Slf4j
