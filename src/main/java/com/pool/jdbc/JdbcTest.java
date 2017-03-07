@@ -9,7 +9,6 @@ import org.jooq.impl.DSL;
 
 /**
  *
- * @author edcracken
  */
 public class JdbcTest {
 
