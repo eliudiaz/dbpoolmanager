@@ -41,6 +41,7 @@ public class JDBCConnection implements Connection, PoolItem {
 
     public JDBCConnection(Connection c, PoolBase pool, Long maxIddleTime) {
         this.usages = 0;
+        this.lastTransaction = System.currentTimeMillis();
         this.c = c;
         this.maxIddleTime = maxIddleTime * 1000L; //comes in seconds
         this.pool = pool;

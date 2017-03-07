@@ -21,8 +21,11 @@ public abstract class PoolBase<T extends PoolItem> {
 
     public static PoolInitializer initer;
     private final Map<T, Long> locked, unlocked;
+    /**
+     * check connection expiration time
+     */
     @Getter
-    private final long expirationTime;
+    private final long expirationTime;    
     @Getter
     private final Integer maxSize;
     @Getter
