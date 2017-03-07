@@ -18,33 +18,33 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class JDBConnectionPool extends PoolBase<CachedConnection> {
+public class JDBPool extends PoolBase<JDBCConnection> {
 
     private final String dsn;
     private final String usr;
     private final String pwd;
     private final Long maxIddleTime;
 
-    public static JDBConnectionPool build(String driver, String dsn, String usr, String pwd) {
-        return new JDBConnectionPool(driver, dsn, usr, pwd);
+    public static JDBPool build(String driver, String dsn, String usr, String pwd) {
+        return new JDBPool(driver, dsn, usr, pwd);
     }
 
-    public static JDBConnectionPool build(String driver, String dsn, String usr, String pwd,
+    public static JDBPool build(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        return new JDBConnectionPool(driver, dsn, usr, pwd,
+        return new JDBPool(driver, dsn, usr, pwd,
                 minConnections, maxConnections, 30L, 10L);
     }
 
-    public JDBConnectionPool(String driver, String dsn, String usr, String pwd) {
+    public JDBPool(String driver, String dsn, String usr, String pwd) {
         this(driver, dsn, usr, pwd, 2, 10, 30L, 10L);
     }
 
-    public JDBConnectionPool(String driver, String dsn, String usr, String pwd,
+    public JDBPool(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
         this(driver, dsn, usr, pwd, minConnections, maxConnections, 30L, 10L);
     }
 
-    public JDBConnectionPool(
+    public JDBPool(
             String driver,
             String dsn,
             String usr,
@@ -66,7 +66,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         this.maxIddleTime = maxIddleTime;
         if (minPoolSize > 0) {
             PoolBase.initer
-                    = new PoolInitializer<CachedConnection>(JDBConnectionPool.this,
+                    = new PoolInitializer<JDBCConnection>(JDBPool.this,
                             minPoolSize);
             PoolBase.initer.start();
         }
@@ -98,9 +98,9 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     }
 
     @Override
-    protected CachedConnection create() {
+    protected JDBCConnection create() {
         try {
-            return new CachedConnection(DriverManager
+            return new JDBCConnection(DriverManager
                     .getConnection(dsn, usr, pwd), this, maxIddleTime);
         } catch (SQLException e) {
             log.debug("error creating!!", e);
@@ -109,7 +109,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     }
 
     @Override
-    public void expire(CachedConnection o) {
+    public void expire(JDBCConnection o) {
         try {
             o.close();
         } catch (SQLException e) {
@@ -118,7 +118,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     }
 
     @Override
-    public boolean validate(CachedConnection o) {
+    public boolean validate(JDBCConnection o) {
         try {
             return (!o.isClosed());
         } catch (SQLException e) {

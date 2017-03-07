@@ -31,7 +31,7 @@ import java.util.concurrent.Executor;
 /**
  *
  */
-public class CachedConnection implements Connection, PoolItem {
+public class JDBCConnection implements Connection, PoolItem {
 
     private final Connection c;
     private Integer usages;
@@ -39,7 +39,7 @@ public class CachedConnection implements Connection, PoolItem {
     private Long maxIddleTime; //seconds
     private PoolBase pool;
 
-    public CachedConnection(Connection c, PoolBase pool, Long maxIddleTime) {
+    public JDBCConnection(Connection c, PoolBase pool, Long maxIddleTime) {
         this.usages = 0;
         this.c = c;
         this.maxIddleTime = maxIddleTime * 1000L; //comes in seconds
@@ -406,7 +406,7 @@ public class CachedConnection implements Connection, PoolItem {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CachedConnection other = (CachedConnection) obj;
+        final JDBCConnection other = (JDBCConnection) obj;
         if (!Objects.equals(this.c, other.c)) {
             return false;
         }
