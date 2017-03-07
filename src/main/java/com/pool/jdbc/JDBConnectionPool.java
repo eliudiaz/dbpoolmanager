@@ -25,23 +25,23 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     private final String pwd;
     private final Long maxIddleTime;
 
-    public static JDBConnectionPool build(String dsn, String usr, String pwd) {
-        return new JDBConnectionPool(dsn, usr, pwd);
+    public static JDBConnectionPool build(String driver, String dsn, String usr, String pwd) {
+        return new JDBConnectionPool(driver, dsn, usr, pwd);
     }
 
-    public static JDBConnectionPool build(String dsn, String usr, String pwd,
+    public static JDBConnectionPool build(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        return new JDBConnectionPool(usr, dsn, usr, pwd,
+        return new JDBConnectionPool(driver, dsn, usr, pwd,
                 minConnections, maxConnections, 30L, 10L);
     }
 
-    public JDBConnectionPool(String dsn, String usr, String pwd) {
-        this(usr, dsn, usr, pwd, 2, 10, 30L, 10L);
+    public JDBConnectionPool(String driver, String dsn, String usr, String pwd) {
+        this(driver, dsn, usr, pwd, 2, 10, 30L, 10L);
     }
 
-    public JDBConnectionPool(String dsn, String usr, String pwd,
+    public JDBConnectionPool(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        this(usr, dsn, usr, pwd, minConnections, maxConnections, 30L, 10L);
+        this(driver, dsn, usr, pwd, minConnections, maxConnections, 30L, 10L);
     }
 
     public JDBConnectionPool(
