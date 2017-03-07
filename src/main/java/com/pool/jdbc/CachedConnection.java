@@ -52,11 +52,13 @@ public class CachedConnection implements Connection, PoolItem {
             pool.checkIn(this);
             throw new ConnectionMaxIddleTimeReachedException();
         }
+        lastTransaction = now;
     }
 
     @Override
     public void increaseUsages() {
         usages++;
+        lastTransaction = System.currentTimeMillis();
     }
 
     @Override
