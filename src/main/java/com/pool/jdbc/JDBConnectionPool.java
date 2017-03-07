@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.pool.db;
+package com.pool.jdbc;
 
-import com.pool.db.exception.PoolInitializationException;
+import com.pool.api.PoolInitializer;
+import com.pool.api.PoolBase;
+import com.pool.api.exception.PoolInitializationException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

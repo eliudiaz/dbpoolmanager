@@ -1,4 +1,4 @@
-package com.pool.db;
+package com.pool.api;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * @param <T>
  */
 @Slf4j
-public class PoolInitializer<T> extends Thread {
+public class PoolInitializer<T extends PoolItem> extends Thread {
 
     private final PoolBase<T> pool;
 
