@@ -28,10 +28,10 @@ public abstract class PoolBase<T extends PoolItem> {
     @Getter
     private final Integer minSize;
 
-    public PoolBase(Integer maxSize, Integer minSize) {
-        expirationTime = 30000; //default time
-        locked = new HashMap<>();
-        unlocked = new HashMap<>();
+    public PoolBase(Integer maxSize, Integer minSize, Long expirationTime) {
+        this.expirationTime = expirationTime * 1000L; //comes in seconds
+        this.locked = new HashMap<>();
+        this.unlocked = new HashMap<>();
         this.maxSize = maxSize;
         this.minSize = minSize;
     }

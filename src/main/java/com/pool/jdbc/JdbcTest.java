@@ -5,6 +5,7 @@
  */
 package com.pool.jdbc;
 
+import com.pool.api.exception.MaxPoolSizeReachedException;
 import java.sql.Connection;
 import org.jooq.impl.DSL;
 
@@ -24,9 +25,21 @@ public class JdbcTest {
             System.out.println(">> " + DSL
                     .using(c)
                     .fetchMany("select count(*) from products"));
-
+            testMaxConnections(pool);
+            
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
+        }
+    }
+
+    private static void testMaxConnections(JDBConnectionPool pool) {
+        try {
+            while (true) {
+                pool.getConnection();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            assert e instanceof MaxPoolSizeReachedException;
         }
     }
 

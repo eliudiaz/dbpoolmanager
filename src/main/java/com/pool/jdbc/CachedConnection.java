@@ -5,6 +5,7 @@
  */
 package com.pool.jdbc;
 
+import com.pool.api.PoolBase;
 import com.pool.api.PoolItem;
 import java.sql.Array;
 import java.sql.Blob;
@@ -33,10 +34,15 @@ public class CachedConnection implements Connection, PoolItem {
 
     private final Connection c;
     private int usages;
+    private long lastTransaction;
+    private long maxIddleTime; //seconds
+    private PoolBase pool;
 
-    public CachedConnection(Connection c) {
+    public CachedConnection(Connection c, PoolBase pool, long maxIddleTime) {
         this.usages = 0;
         this.c = c;
+        this.maxIddleTime = maxIddleTime;
+        this.pool = pool;
     }
 
     @Override

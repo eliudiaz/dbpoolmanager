@@ -24,10 +24,34 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     private final String usr;
     private final String pwd;
 
+    public static JDBConnectionPool build(String dsn, String usr, String pwd) {
+        return new JDBConnectionPool(dsn, usr, pwd);
+    }
+
+    public static JDBConnectionPool build(String dsn, String usr, String pwd,
+            Integer minConnections, Integer maxConnections) {
+        return new JDBConnectionPool(usr, dsn, usr, pwd, 
+                minConnections, maxConnections, 30L);
+    }
+
+    public JDBConnectionPool(String dsn, String usr, String pwd) {
+        this(usr, dsn, usr, pwd, 2, 10, 30L);
+    }
+
+    public JDBConnectionPool(String dsn, String usr, String pwd,
+            Integer minConnections, Integer maxConnections) {
+        this(usr, dsn, usr, pwd, minConnections, maxConnections, 30L);
+    }
+
     public JDBConnectionPool(
-            String driver, String dsn, String usr, String pwd,
-            Integer maxPoolSize, Integer minPoolSize) {
-        super(maxPoolSize, minPoolSize);
+            String driver,
+            String dsn,
+            String usr,
+            String pwd,
+            Integer maxPoolSize,
+            Integer minPoolSize,
+            Long expirationTime) {
+        super(maxPoolSize, minPoolSize, expirationTime);
         try {
             Class.forName(driver).newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -38,7 +62,9 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         this.usr = usr;
         this.pwd = pwd;
         if (minPoolSize > 0) {
-            PoolBase.initer = new PoolInitializer<CachedConnection>(JDBConnectionPool.this, minPoolSize);
+            PoolBase.initer
+                    = new PoolInitializer<CachedConnection>(JDBConnectionPool.this,
+                            minPoolSize);
             PoolBase.initer.start();
         }
     }
