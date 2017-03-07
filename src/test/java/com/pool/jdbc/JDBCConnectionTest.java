@@ -8,8 +8,6 @@ package com.pool.jdbc;
 import com.pool.jdbc.exception.ConnectionMaxIddleTimeReachedException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +16,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  *
- * @author edcracken
  */
 @RunWith(MockitoJUnitRunner.class)
 public class JDBCConnectionTest {
