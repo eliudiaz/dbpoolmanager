@@ -23,6 +23,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     private final String dsn;
     private final String usr;
     private final String pwd;
+    private final Long maxIddleTime;
 
     public static JDBConnectionPool build(String dsn, String usr, String pwd) {
         return new JDBConnectionPool(dsn, usr, pwd);
@@ -30,17 +31,17 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
 
     public static JDBConnectionPool build(String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        return new JDBConnectionPool(usr, dsn, usr, pwd, 
-                minConnections, maxConnections, 30L);
+        return new JDBConnectionPool(usr, dsn, usr, pwd,
+                minConnections, maxConnections, 30L, 10L);
     }
 
     public JDBConnectionPool(String dsn, String usr, String pwd) {
-        this(usr, dsn, usr, pwd, 2, 10, 30L);
+        this(usr, dsn, usr, pwd, 2, 10, 30L, 10L);
     }
 
     public JDBConnectionPool(String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        this(usr, dsn, usr, pwd, minConnections, maxConnections, 30L);
+        this(usr, dsn, usr, pwd, minConnections, maxConnections, 30L, 10L);
     }
 
     public JDBConnectionPool(
@@ -50,7 +51,8 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
             String pwd,
             Integer maxPoolSize,
             Integer minPoolSize,
-            Long expirationTime) {
+            Long expirationTime,
+            Long maxIddleTime) {
         super(maxPoolSize, minPoolSize, expirationTime);
         try {
             Class.forName(driver).newInstance();
@@ -61,6 +63,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         this.dsn = dsn;
         this.usr = usr;
         this.pwd = pwd;
+        this.maxIddleTime = maxIddleTime;
         if (minPoolSize > 0) {
             PoolBase.initer
                     = new PoolInitializer<CachedConnection>(JDBConnectionPool.this,
@@ -97,7 +100,8 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
     @Override
     protected CachedConnection create() {
         try {
-            return new CachedConnection(DriverManager.getConnection(dsn, usr, pwd));
+            return new CachedConnection(DriverManager
+                    .getConnection(dsn, usr, pwd), this, maxIddleTime);
         } catch (SQLException e) {
             log.debug("error creating!!", e);
             return (null);
