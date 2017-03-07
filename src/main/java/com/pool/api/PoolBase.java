@@ -5,6 +5,7 @@
  */
 package com.pool.api;
 
+import com.pool.api.exception.MaxPoolSizeReachedException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,6 +51,9 @@ public abstract class PoolBase<T extends PoolItem> {
     public abstract void expire(T o);
 
     public synchronized T checkOut() {
+        if (locked.size() >= maxSize) {
+            throw new MaxPoolSizeReachedException("Max pool size reached!");
+        }
         final long now = System.currentTimeMillis();
         T t = null;
         if (unlocked.size() > 0) {
