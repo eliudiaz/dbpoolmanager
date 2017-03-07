@@ -50,12 +50,9 @@ public class PoolInitializer<T extends PoolItem> extends Thread {
                     try {
                         T o = pool.create();
                         if (!pool.validate(o)) {
-                            //firePoolEvent(ObjectPoolEvent.Type.VALIDATION_ERROR);
                             throw new RuntimeException("Unable to create a valid item");
                         } else {
                             pool.checkIn(o);
-//                            free.add(new TimeWrapper<>(o, pool.idleTimeout));
-//                            pool.notifyAll();
                             count++;
                             log.debug("Initialized new item in pool");
                         }
