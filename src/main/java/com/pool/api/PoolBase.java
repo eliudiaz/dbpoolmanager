@@ -18,14 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class PoolBase<T extends PoolItem> {
 
+    public static PoolInitializer initer;
+    private final Map<T, Long> locked, unlocked;
     @Getter
     private final long expirationTime;
-    private final Map<T, Long> locked, unlocked;
     @Getter
     private final Integer maxSize;
     @Getter
     private final Integer minSize;
-    public static PoolInitializer initer;
 
     public PoolBase(Integer maxSize, Integer minSize) {
         expirationTime = 30000; //default time
