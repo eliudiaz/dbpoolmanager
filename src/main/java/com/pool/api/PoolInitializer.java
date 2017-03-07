@@ -66,7 +66,6 @@ public class PoolInitializer<T extends PoolItem> extends Thread {
         synchronized (pool) {
             if (!stopped && done) {
                 log.debug("Initialized pool with " + count + (count != 1 ? " new items" : " new item"));
-//                firePoolEvent(ObjectPoolEvent.Type.INIT_COMPLETED);
             }
             if (pool.initer != Thread.currentThread()) {
                 pool.initer = null;
