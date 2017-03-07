@@ -9,13 +9,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author eliud
  * @param <T>
  */
-public abstract class PoolBase<T> {
+@Slf4j
+public abstract class PoolBase<T extends PoolItem> {
 
     @Getter
     private final long expirationTime;
@@ -62,6 +64,10 @@ public abstract class PoolBase<T> {
                 } else if (validate(t)) {
                     unlocked.remove(t);
                     locked.put(t, now);
+                    if (t.usagesCount() > 0) {
+                        log.warn("You are getting a recycled connection object. Usages count: {0}", t.usagesCount());
+                    }
+                    t.increaseUsages();
                     return (t);
                 } else {
                     // object failed validation
@@ -71,7 +77,7 @@ public abstract class PoolBase<T> {
                 }
             }
             t = create();
-
+            t.increaseUsages();
             locked.put(t, now);
             return (t);
         }

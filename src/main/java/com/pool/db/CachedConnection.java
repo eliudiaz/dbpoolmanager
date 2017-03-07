@@ -29,12 +29,24 @@ import java.util.concurrent.Executor;
  *
  * @author eliud
  */
-public class CachedConnection implements Connection {
+public class CachedConnection implements Connection, PoolItem {
 
-    private Connection c;
+    private final Connection c;
+    private int usages;
 
     public CachedConnection(Connection c) {
+        this.usages = 0;
         this.c = c;
+    }
+
+    @Override
+    public void increaseUsages() {
+        usages++;
+    }
+
+    @Override
+    public int usagesCount() {
+        return usages;
     }
 
     @Override
