@@ -26,7 +26,7 @@ public class JDBCConnectionTest {
     @Mock
     Connection connection;
     @Mock
-    JDBPool pool;
+    JDBCPool pool;
 
     @Test(expected = ConnectionMaxIddleTimeReachedException.class)
     public void testAvailability() {

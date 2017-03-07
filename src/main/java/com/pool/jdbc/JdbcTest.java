@@ -16,7 +16,7 @@ public class JdbcTest {
     public static void main(String... arg) {
         try {
             int min = 2, max = 10;
-            JDBPool pool = JDBPool
+            JDBCPool pool = JDBCPool
                     .build("com.mysql.jdbc.Driver",
                             "jdbc:mysql://localhost:3306/pos",
                             "root", "eliu", min, max);

@@ -18,33 +18,33 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class JDBPool extends PoolBase<JDBCConnection> {
+public class JDBCPool extends PoolBase<JDBCConnection> {
 
     private final String dsn;
     private final String usr;
     private final String pwd;
     private final Long maxIddleTime;
 
-    public static JDBPool build(String driver, String dsn, String usr, String pwd) {
-        return new JDBPool(driver, dsn, usr, pwd);
+    public static JDBCPool build(String driver, String dsn, String usr, String pwd) {
+        return new JDBCPool(driver, dsn, usr, pwd);
     }
 
-    public static JDBPool build(String driver, String dsn, String usr, String pwd,
+    public static JDBCPool build(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        return new JDBPool(driver, dsn, usr, pwd,
+        return new JDBCPool(driver, dsn, usr, pwd,
                 minConnections, maxConnections, 30L, 10L);
     }
 
-    public JDBPool(String driver, String dsn, String usr, String pwd) {
+    public JDBCPool(String driver, String dsn, String usr, String pwd) {
         this(driver, dsn, usr, pwd, 2, 10, 30L, 10L);
     }
 
-    public JDBPool(String driver, String dsn, String usr, String pwd,
+    public JDBCPool(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
         this(driver, dsn, usr, pwd, minConnections, maxConnections, 30L, 10L);
     }
 
-    public JDBPool(
+    public JDBCPool(
             String driver,
             String dsn,
             String usr,
@@ -54,7 +54,7 @@ public class JDBPool extends PoolBase<JDBCConnection> {
             Long expirationTime,
             Long maxIddleTime) {
         super(maxPoolSize, minPoolSize, expirationTime);
-        try {
+        try {            
             Class.forName(driver).newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace(System.err);
@@ -66,7 +66,7 @@ public class JDBPool extends PoolBase<JDBCConnection> {
         this.maxIddleTime = maxIddleTime;
         if (minPoolSize > 0) {
             PoolBase.initer
-                    = new PoolInitializer<JDBCConnection>(JDBPool.this,
+                    = new PoolInitializer<JDBCConnection>(JDBCPool.this,
                             minPoolSize);
             PoolBase.initer.start();
         }
@@ -101,7 +101,8 @@ public class JDBPool extends PoolBase<JDBCConnection> {
     protected JDBCConnection create() {
         try {
             return new JDBCConnection(DriverManager
-                    .getConnection(dsn, usr, pwd), this, maxIddleTime);
+                    .getConnection(dsn, usr, pwd),
+                    this, maxIddleTime);
         } catch (SQLException e) {
             log.debug("error creating!!", e);
             return (null);
