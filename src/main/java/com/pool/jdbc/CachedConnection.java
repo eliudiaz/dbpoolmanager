@@ -34,12 +34,12 @@ import java.util.concurrent.Executor;
 public class CachedConnection implements Connection, PoolItem {
 
     private final Connection c;
-    private int usages;
-    private long lastTransaction;
-    private long maxIddleTime; //seconds
+    private Integer usages;
+    private Long lastTransaction;
+    private Long maxIddleTime; //seconds
     private PoolBase pool;
 
-    public CachedConnection(Connection c, PoolBase pool, long maxIddleTime) {
+    public CachedConnection(Connection c, PoolBase pool, Long maxIddleTime) {
         this.usages = 0;
         this.c = c;
         this.maxIddleTime = maxIddleTime * 1000L; //comes in seconds
