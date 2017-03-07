@@ -9,7 +9,6 @@ import com.pool.api.PoolInitializer;
 import com.pool.api.PoolBase;
 import com.pool.api.exception.PoolInitializationException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +32,13 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
             Integer minConnections, Integer maxConnections) {
         return new JDBCPool(driver, dsn, usr, pwd,
                 maxConnections, minConnections, 30L, 10L);
+    }
+
+    public static JDBCPool build(String driver, String dsn, String usr, String pwd,
+            Integer minConnections, Integer maxConnections,
+            Long expirationTime, Long iddleTime) {
+        return new JDBCPool(driver, dsn, usr, pwd,
+                maxConnections, minConnections, expirationTime, iddleTime);
     }
 
     public JDBCPool(String driver, String dsn, String usr, String pwd) {
@@ -63,7 +69,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
         this.dsn = dsn;
         this.usr = usr;
         this.pwd = pwd;
-        this.maxIddleTime = maxIddleTime;
+        this.maxIddleTime = maxIddleTime;        
         if (minPoolSize > 0) {
             PoolBase.initer
                     = new PoolInitializer<JDBCConnection>(JDBCPool.this,

@@ -25,7 +25,7 @@ public abstract class PoolBase<T extends PoolItem> {
      * check connection expiration time
      */
     @Getter
-    private final long expirationTime;    
+    private final long expirationTime;
     @Getter
     private final Integer maxSize;
     @Getter
@@ -37,6 +37,7 @@ public abstract class PoolBase<T extends PoolItem> {
         this.unlocked = new HashMap<>();
         this.maxSize = maxSize;
         this.minSize = minSize;
+        validate();
     }
 
     public PoolBase() {
@@ -45,6 +46,12 @@ public abstract class PoolBase<T extends PoolItem> {
         unlocked = new HashMap<>();
         this.maxSize = 10;
         this.minSize = 5;
+    }
+
+    private void validate() {
+        assert expirationTime > 0;
+        assert maxSize > 0;
+        assert minSize <= maxSize;
     }
 
     protected abstract T create();
