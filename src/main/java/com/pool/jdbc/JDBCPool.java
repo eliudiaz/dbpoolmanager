@@ -32,7 +32,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
     public static JDBCPool build(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
         return new JDBCPool(driver, dsn, usr, pwd,
-                minConnections, maxConnections, 30L, 10L);
+                maxConnections, minConnections, 30L, 10L);
     }
 
     public JDBCPool(String driver, String dsn, String usr, String pwd) {
@@ -41,7 +41,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
 
     public JDBCPool(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections) {
-        this(driver, dsn, usr, pwd, minConnections, maxConnections, 30L, 10L);
+        this(driver, dsn, usr, pwd, maxConnections, minConnections, 30L, 10L);
     }
 
     public JDBCPool(
@@ -91,7 +91,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
                     log.warn("Error getting connection", ex);
                     t = t.getCause();
                 }
-                throw new SQLException(ex.getMessage());
+                throw new SQLException(ex.getMessage(), ex);
             }
             throw ex;
         }

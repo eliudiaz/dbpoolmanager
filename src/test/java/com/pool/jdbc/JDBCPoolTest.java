@@ -5,10 +5,9 @@
  */
 package com.pool.jdbc;
 
+import com.pool.api.exception.MaxPoolSizeReachedException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,24 +24,29 @@ public class JDBCPoolTest {
     @PrepareForTest({JDBCUtil.class})
     @Test
     public void maxConnectionsValidation() {
-
         mockStaticClasses();
-        JDBCPool pool = JDBCPool.build("", "", "", "", 0, 2);
-        while (true) {
+        int c = 1;
+        JDBCPool pool = JDBCPool.build("", "", "", "", 0, c);
+        while (c > 0) {
             try {
                 pool.getConnection();
             } catch (SQLException ex) {
+                Assert.assertTrue(ex.getCause() instanceof MaxPoolSizeReachedException);
             }
+            c--;
         }
     }
 
     private void mockStaticClasses() {
-        Connection c = PowerMockito.mock(Connection.class);
-        PowerMockito.mockStatic(JDBCUtil.class);
-        PowerMockito.when(JDBCUtil.createConnection("",
-                "",
-                "")).thenReturn(c);
-        Assert.assertNotNull(JDBCUtil.createConnection("", "", ""));
+        try {
+            Connection c = PowerMockito.mock(Connection.class);
+            PowerMockito.mockStatic(JDBCUtil.class);
+            PowerMockito.when(JDBCUtil.createConnection("",
+                    "",
+                    "")).thenReturn(c);
+            Assert.assertNotNull(JDBCUtil.createConnection("", "", ""));
+        } catch (SQLException ex) {
+        }
     }
 
 }
