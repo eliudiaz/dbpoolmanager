@@ -39,6 +39,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
         this.pwd = pwd;
         if (minPoolSize > 0) {
             PoolBase.initer = new PoolInitializer<CachedConnection>(JDBConnectionPool.this, minPoolSize);
+            PoolBase.initer.start();
         }
     }
 
@@ -54,7 +55,7 @@ public class JDBConnectionPool extends PoolBase<CachedConnection> {
                     .orElseThrow(this::throwErrorGettingConnectionException);
 
         } catch (Exception ex) {
-            log.warn("Error getting connection", ex);
+            log.error("Error getting connection", ex);
             if (!(ex instanceof SQLException)) {
                 Throwable t = ex.getCause();
                 while (t != null) {

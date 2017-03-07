@@ -51,7 +51,7 @@ public abstract class PoolBase<T extends PoolItem> {
 
     public synchronized T checkOut() {
         final long now = System.currentTimeMillis();
-        T t;
+        T t = null;
         if (unlocked.size() > 0) {
             for (Iterator<Map.Entry<T, Long>> it = unlocked.entrySet().iterator(); it.hasNext();) {
                 t = it.next().getKey();
@@ -75,13 +75,12 @@ public abstract class PoolBase<T extends PoolItem> {
                     t = null;
                 }
             }
-            t = create();
-            t.increaseUsages();
-            locked.put(t, now);
-            return (t);
-        }
 
-        return null;
+        }
+        t = create();
+        t.increaseUsages();
+        locked.put(t, now);
+        return (t);
     }
 
     public synchronized void checkIn(T t) {
