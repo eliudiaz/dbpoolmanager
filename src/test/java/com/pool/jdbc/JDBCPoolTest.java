@@ -5,7 +5,7 @@
  */
 package com.pool.jdbc;
 
-import com.pool.api.exception.MaxPoolSizeReachedException;
+import com.pool.api.exception.PoolInitializationException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.junit.Assert;
@@ -22,19 +22,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class JDBCPoolTest {
 
     @PrepareForTest({JDBCUtil.class})
-    @Test
-    public void maxConnectionsValidation() {
+    @Test(expected = PoolInitializationException.class)
+    public void thresholdsValidationTest() {
         mockStaticClasses();
-        int c = 1;
-        JDBCPool pool = JDBCPool.build("", "", "", "", 0, c);
-        while (c > 0) {
-            try {
-                pool.getConnection();
-            } catch (SQLException ex) {
-                Assert.assertTrue(ex.getCause() instanceof MaxPoolSizeReachedException);
-            }
-            c--;
-        }
+        JDBCPool.build("", "", "", "", 10, 0);
+        Assert.fail("validation failed!");
     }
 
     private void mockStaticClasses() {

@@ -6,6 +6,7 @@
 package com.pool.api;
 
 import com.pool.api.exception.MaxPoolSizeReachedException;
+import com.pool.api.exception.PoolInitializationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,9 +50,13 @@ public abstract class PoolBase<T extends PoolItem> {
     }
 
     private void validate() {
-        assert expirationTime > 0;
-        assert maxSize > 0;
-        assert minSize <= maxSize;
+
+        if (expirationTime > 0
+                || maxSize > 0
+                || minSize <= maxSize) {
+            throw new PoolInitializationException("Error validating pool configuration");
+        }
+
     }
 
     protected abstract T create();
