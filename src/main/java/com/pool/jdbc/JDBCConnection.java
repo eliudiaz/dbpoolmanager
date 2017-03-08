@@ -56,6 +56,11 @@ public class JDBCConnection implements Connection, PoolItem {
         lastTransaction = now;
     }
 
+    public PoolItem recycle() {
+        // recycle current connection in a new container
+        return new JDBCConnection(c, pool, maxIdleTime);
+    }
+
     @Override
     public void increaseUsages() {
         usages++;

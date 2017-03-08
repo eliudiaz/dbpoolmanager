@@ -105,7 +105,7 @@ public abstract class PoolBase<T extends PoolItem> {
 
     public synchronized void checkIn(T t) {
         locked.remove(t);
-        unlocked.put(t, System.currentTimeMillis());
+        unlocked.put((T) t.recycle(), System.currentTimeMillis());
     }
 
     public int getSize() {
