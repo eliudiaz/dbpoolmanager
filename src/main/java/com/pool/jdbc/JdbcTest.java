@@ -24,7 +24,7 @@ public class JdbcTest {
             assert c != null;
             System.out.println(">> " + DSL
                     .using(c)
-                    .fetchMany("select count(*) from products"));
+                    .fetchMany("show tables;"));
 
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
