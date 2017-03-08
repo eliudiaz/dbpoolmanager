@@ -51,9 +51,9 @@ public abstract class PoolBase<T extends PoolItem> {
 
     private void validate() {
 
-        if (expirationTime > 0
-                || maxSize > 0
-                || minSize <= maxSize) {
+        if (expirationTime <= 0
+                || maxSize <= 0
+                || minSize > maxSize) {
             throw new PoolInitializationException("Error validating pool configuration");
         }
 
