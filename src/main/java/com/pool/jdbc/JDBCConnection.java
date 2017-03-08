@@ -36,20 +36,20 @@ public class JDBCConnection implements Connection, PoolItem {
     private final Connection c;
     private Integer usages;
     private Long lastTransaction;
-    private Long maxIddleTime; //seconds
+    private Long maxIdleTime; //seconds
     private PoolBase pool;
 
     public JDBCConnection(Connection c, PoolBase pool, Long maxIddleTime) {
         this.usages = 0;
         this.lastTransaction = System.currentTimeMillis();
         this.c = c;
-        this.maxIddleTime = maxIddleTime * 1000L; //comes in seconds
+        this.maxIdleTime = maxIddleTime * 1000L; //comes in seconds
         this.pool = pool;
     }
 
     private void checkAvailability() {
         final long now = System.currentTimeMillis();
-        if ((now - lastTransaction) >= maxIddleTime) { // max iddle time complete
+        if ((now - lastTransaction) >= maxIdleTime) { // max iddle time complete
             pool.checkIn(this);
             throw new ConnectionMaxIddleTimeReachedException();
         }

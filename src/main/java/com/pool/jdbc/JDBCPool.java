@@ -22,7 +22,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
     private final String dsn;
     private final String usr;
     private final String pwd;
-    private final Long maxIddleTime;
+    private final Long maxIdleTime;
 
     public static JDBCPool build(String driver, String dsn, String usr, String pwd) {
         return new JDBCPool(driver, dsn, usr, pwd);
@@ -36,9 +36,9 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
 
     public static JDBCPool build(String driver, String dsn, String usr, String pwd,
             Integer minConnections, Integer maxConnections,
-            Long expirationTime, Long iddleTime) {
+            Long expirationTime, Long idleTime) {
         return new JDBCPool(driver, dsn, usr, pwd,
-                maxConnections, minConnections, expirationTime, iddleTime);
+                maxConnections, minConnections, expirationTime, idleTime);
     }
 
     public JDBCPool(String driver, String dsn, String usr, String pwd) {
@@ -69,7 +69,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
         this.dsn = dsn;
         this.usr = usr;
         this.pwd = pwd;
-        this.maxIddleTime = maxIddleTime;        
+        this.maxIdleTime = maxIddleTime;        
         if (minPoolSize > 0) {
             PoolBase.initer
                     = new PoolInitializer<JDBCConnection>(JDBCPool.this,
@@ -108,7 +108,7 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
         try {
             return new JDBCConnection(
                     JDBCUtil.createConnection(dsn, usr, pwd),
-                    this, maxIddleTime);
+                    this, maxIdleTime);
         } catch (SQLException e) {
             log.debug("error creating!!", e);
             return (null);
