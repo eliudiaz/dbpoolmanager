@@ -83,7 +83,8 @@ public abstract class PoolBase<T extends PoolItem> {
                     unlocked.remove(t);
                     locked.put(t, now);
                     if (t.usagesCount() > 0) {
-                        log.warn("You are getting a recycled connection object. Usages count: {0}", t.usagesCount());
+                        log.warn("You are getting a recycled connection object."
+                                + " Usages count: {0}", t.usagesCount());
                     }
                     t.increaseUsages();
                     return (t);
