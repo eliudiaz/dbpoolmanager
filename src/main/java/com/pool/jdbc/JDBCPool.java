@@ -133,4 +133,10 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
             return (false);
         }
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }    
+    
 }

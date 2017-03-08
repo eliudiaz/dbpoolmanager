@@ -56,6 +56,7 @@ public class JdbcTest {
         }
     }
 
+   
     public static void retryOldIdle(List<Connection> old) {
         try {
             System.out.println("reusing olds!");

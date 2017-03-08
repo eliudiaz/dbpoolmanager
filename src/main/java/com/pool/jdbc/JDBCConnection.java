@@ -31,13 +31,13 @@ import java.util.concurrent.Executor;
 /**
  *
  */
-public class JDBCConnection implements Connection, PoolItem {
+public class JDBCConnection extends Thread implements Connection, PoolItem {
 
     private final Connection c;
     private Integer usages;
     private Long lastTransaction;
-    private Long maxIdleTime; //seconds
-    private PoolBase pool;
+    private final Long maxIdleTime; //seconds
+    private final PoolBase pool;
 
     public JDBCConnection(Connection c, PoolBase pool, Long maxIddleTime) {
         this.usages = 0;
@@ -49,7 +49,7 @@ public class JDBCConnection implements Connection, PoolItem {
 
     private void checkAvailability() {
         final long now = System.currentTimeMillis();
-        if ((now - lastTransaction) >= maxIdleTime) { // max iddle time complete
+        if ((now - lastTransaction) >= maxIdleTime) {
             pool.checkIn(this);
             throw new ConnectionMaxIddleTimeReachedException();
         }
@@ -419,4 +419,5 @@ public class JDBCConnection implements Connection, PoolItem {
         return true;
     }
 
+    
 }
