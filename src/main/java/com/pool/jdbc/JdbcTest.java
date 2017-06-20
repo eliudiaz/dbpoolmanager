@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pool.jdbc;
+
+import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import org.jooq.impl.DSL;
 
 /**
  *
@@ -56,13 +52,11 @@ public class JdbcTest {
         }
     }
 
-   
+
     public static void retryOldIdle(List<Connection> old) {
         try {
             System.out.println("reusing olds!");
-            old.stream().forEach(c -> {
-                connectionTest(c);
-            });
+            old.stream().forEach(JdbcTest::connectionTest);
         } catch (Exception e) {
             System.out.println(">> normal, they all were idle connections!" + e.getMessage());
         }
