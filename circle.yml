@@ -5,3 +5,5 @@ dependencies:
 test:
   override:
     - mvn -o surefire:test
+  post:
+    - ./mvnw jacoco:report coveralls:report
