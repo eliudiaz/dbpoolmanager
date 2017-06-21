@@ -4,4 +4,7 @@ dependencies:
 
 test:
   override:
-    - mvn test jacoco:report coveralls:report
+    - mvn test
+  post:
+    - mvn jacoco:report
+    - mvn coveralls:report
