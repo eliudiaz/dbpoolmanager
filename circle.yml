@@ -3,5 +3,5 @@ dependencies:
     - mvn -DskipTests clean install
 
 test:
-  post:
-    - mvn jacoco:report coveralls:report
+  override:
+    - mvn test jacoco:report coveralls:report
