@@ -1,9 +1,7 @@
 dependencies:
   override:
-    - mvn -DskipTests clean install dependency:resolve-plugins dependency:go-offline
+    - mvn -DskipTests clean install
 
 test:
-  override:
-    - mvn -o surefire:test
   post:
     - mvn jacoco:report coveralls:report
