@@ -3,6 +3,7 @@ package com.pool.jdbc;
 import com.pool.api.PoolBase;
 import com.pool.api.PoolItem;
 import com.pool.jdbc.exception.ConnectionMaxIddleTimeReachedException;
+
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -29,10 +30,10 @@ import java.util.concurrent.Executor;
 public class JDBCConnection extends Thread implements Connection, PoolItem {
 
     private final Connection c;
-    private Integer usages;
-    private Long lastTransaction;
     private final Long maxIdleTime; //seconds
     private final PoolBase pool;
+    private Integer usages;
+    private Long lastTransaction;
 
     public JDBCConnection(Connection c, PoolBase pool, Long maxIddleTime) {
         this.usages = 0;
@@ -92,15 +93,15 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     }
 
     @Override
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        checkAvailability();
-        c.setAutoCommit(autoCommit);
-    }
-
-    @Override
     public boolean getAutoCommit() throws SQLException {
         checkAvailability();
         return c.getAutoCommit();
+    }
+
+    @Override
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        checkAvailability();
+        c.setAutoCommit(autoCommit);
     }
 
     @Override
@@ -134,21 +135,15 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) throws SQLException {
-        checkAvailability();
-        c.setReadOnly(readOnly);
-    }
-
-    @Override
     public boolean isReadOnly() throws SQLException {
         checkAvailability();
         return c.isReadOnly();
     }
 
     @Override
-    public void setCatalog(String catalog) throws SQLException {
+    public void setReadOnly(boolean readOnly) throws SQLException {
         checkAvailability();
-        c.setCatalog(catalog);
+        c.setReadOnly(readOnly);
     }
 
     @Override
@@ -158,15 +153,21 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     }
 
     @Override
-    public void setTransactionIsolation(int level) throws SQLException {
+    public void setCatalog(String catalog) throws SQLException {
         checkAvailability();
-        c.setTransactionIsolation(level);
+        c.setCatalog(catalog);
     }
 
     @Override
     public int getTransactionIsolation() throws SQLException {
         checkAvailability();
         return c.getTransactionIsolation();
+    }
+
+    @Override
+    public void setTransactionIsolation(int level) throws SQLException {
+        checkAvailability();
+        c.setTransactionIsolation(level);
     }
 
     @Override
@@ -212,15 +213,15 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     }
 
     @Override
-    public void setHoldability(int holdability) throws SQLException {
-        checkAvailability();
-        c.setHoldability(holdability);
-    }
-
-    @Override
     public int getHoldability() throws SQLException {
         checkAvailability();
         return c.getHoldability();
+    }
+
+    @Override
+    public void setHoldability(int holdability) throws SQLException {
+        checkAvailability();
+        c.setHoldability(holdability);
     }
 
     @Override
@@ -320,12 +321,6 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     }
 
     @Override
-    public void setClientInfo(Properties properties) throws SQLClientInfoException {
-        checkAvailability();
-        setClientInfo(properties);
-    }
-
-    @Override
     public String getClientInfo(String name) throws SQLException {
         checkAvailability();
         return c.getClientInfo(name);
@@ -335,6 +330,12 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     public Properties getClientInfo() throws SQLException {
         checkAvailability();
         return c.getClientInfo();
+    }
+
+    @Override
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+        checkAvailability();
+        setClientInfo(properties);
     }
 
     @Override
@@ -350,15 +351,15 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
     }
 
     @Override
-    public void setSchema(String schema) throws SQLException {
-        checkAvailability();
-        c.setSchema(schema);
-    }
-
-    @Override
     public String getSchema() throws SQLException {
         checkAvailability();
         return c.getSchema();
+    }
+
+    @Override
+    public void setSchema(String schema) throws SQLException {
+        checkAvailability();
+        c.setSchema(schema);
     }
 
     @Override
@@ -414,5 +415,5 @@ public class JDBCConnection extends Thread implements Connection, PoolItem {
         return true;
     }
 
-    
+
 }

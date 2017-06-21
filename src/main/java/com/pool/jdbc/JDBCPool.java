@@ -1,12 +1,13 @@
 package com.pool.jdbc;
 
-import com.pool.api.PoolInitializer;
 import com.pool.api.PoolBase;
+import com.pool.api.PoolInitializer;
 import com.pool.api.exception.PoolInitializationException;
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -19,29 +20,12 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
     private final String pwd;
     private final Long maxIdleTime;
 
-    public static JDBCPool build(String driver, String dsn, String usr, String pwd) {
-        return new JDBCPool(driver, dsn, usr, pwd);
-    }
-
-    public static JDBCPool build(String driver, String dsn, String usr, String pwd,
-            Integer minConnections, Integer maxConnections) {
-        return new JDBCPool(driver, dsn, usr, pwd,
-                maxConnections, minConnections, 30L, 10L);
-    }
-
-    public static JDBCPool build(String driver, String dsn, String usr, String pwd,
-            Integer minConnections, Integer maxConnections,
-            Long expirationTime, Long idleTime) {
-        return new JDBCPool(driver, dsn, usr, pwd,
-                maxConnections, minConnections, expirationTime, idleTime);
-    }
-
     public JDBCPool(String driver, String dsn, String usr, String pwd) {
         this(driver, dsn, usr, pwd, 2, 10, 30L, 10L);
     }
 
     public JDBCPool(String driver, String dsn, String usr, String pwd,
-            Integer minConnections, Integer maxConnections) {
+                    Integer minConnections, Integer maxConnections) {
         this(driver, dsn, usr, pwd, maxConnections, minConnections, 30L, 10L);
     }
 
@@ -64,13 +48,30 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
         this.dsn = dsn;
         this.usr = usr;
         this.pwd = pwd;
-        this.maxIdleTime = maxIddleTime;        
+        this.maxIdleTime = maxIddleTime;
         if (minPoolSize > 0) {
             PoolBase.initer
                     = new PoolInitializer<JDBCConnection>(JDBCPool.this,
-                            minPoolSize);
+                    minPoolSize);
             PoolBase.initer.start();
         }
+    }
+
+    public static JDBCPool build(String driver, String dsn, String usr, String pwd) {
+        return new JDBCPool(driver, dsn, usr, pwd);
+    }
+
+    public static JDBCPool build(String driver, String dsn, String usr, String pwd,
+                                 Integer minConnections, Integer maxConnections) {
+        return new JDBCPool(driver, dsn, usr, pwd,
+                maxConnections, minConnections, 30L, 10L);
+    }
+
+    public static JDBCPool build(String driver, String dsn, String usr, String pwd,
+                                 Integer minConnections, Integer maxConnections,
+                                 Long expirationTime, Long idleTime) {
+        return new JDBCPool(driver, dsn, usr, pwd,
+                maxConnections, minConnections, expirationTime, idleTime);
     }
 
     private SQLException throwErrorGettingConnectionException() {
@@ -132,6 +133,6 @@ public class JDBCPool extends PoolBase<JDBCConnection> {
     @Override
     public String toString() {
         return super.toString();
-    }    
-    
+    }
+
 }

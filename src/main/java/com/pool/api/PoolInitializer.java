@@ -3,7 +3,6 @@ package com.pool.api;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *
  * @param <T>
  */
 @Slf4j

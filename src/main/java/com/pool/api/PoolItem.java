@@ -8,6 +8,6 @@ public interface PoolItem {
     public void increaseUsages();
 
     public int usagesCount();
-    
+
     public PoolItem recycle();
 }
