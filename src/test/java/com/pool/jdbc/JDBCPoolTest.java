@@ -1,7 +1,6 @@
 package com.pool.jdbc;
 
 import com.pool.api.exception.PoolInitializationException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -10,8 +9,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static com.pool.jdbc.JDBCPool.build;
 import static com.pool.jdbc.JDBCUtil.createConnection;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -23,8 +24,8 @@ public class JDBCPoolTest {
     @Test(expected = PoolInitializationException.class)
     public void thresholdsValidationTest() {
         mockStaticClasses();
-        JDBCPool.build("", "", "", "", 10, 0);
-        Assert.fail("validation failed!");
+        build("", "", "", "", 10, 0);
+        fail("validation failed!");
     }
 
     private void mockStaticClasses() {
