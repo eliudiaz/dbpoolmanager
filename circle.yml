@@ -5,7 +5,7 @@ machine:
 
 notify:
   webhooks:
-    - url: https://coveralls.io/webhook?repo_token=zAfFG9zmPIs9LqP2nTOAJsqgHEFQHNtbl>
+    - url: https://coveralls.io/webhook?repo_token=zAfFG9zmPIs9LqP2nTOAJsqgHEFQHNtbl
 dependencies:
   override:
     - mvn -DskipTests clean install
