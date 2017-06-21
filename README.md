@@ -1,0 +1,1 @@
+[![Coverage Status](https://coveralls.io/repos/github/eliudiaz/dbpoolmanager/badge.svg?branch=master)](https://coveralls.io/github/eliudiaz/dbpoolmanager?branch=master)
