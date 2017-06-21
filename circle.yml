@@ -3,8 +3,7 @@ machine:
     COVERALLS_REPO_TOKEN: zAfFG9zmPIs9LqP2nTOAJsqgHEFQHNtbl
     COVERALLS_PARALLEL: true
     CODECOV_TOKEN: 1ef5771e-cf5e-4365-82ca-2254e36aec8c
-   python:
-      version: 3.5.0
+
 notify:
   webhooks:
     - url: https://coveralls.io/webhook?repo_token=zAfFG9zmPIs9LqP2nTOAJsqgHEFQHNtbl
