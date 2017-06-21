@@ -4,16 +4,18 @@ import com.pool.api.exception.PoolInitializationException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * Created by eliud on 6/21/2017.
- */
+import static com.pool.jdbc.JDBCUtil.createConnection;
+import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 @RunWith(PowerMockRunner.class)
 public class JDBCPoolTest {
 
@@ -27,12 +29,12 @@ public class JDBCPoolTest {
 
     private void mockStaticClasses() {
         try {
-            Connection c = PowerMockito.mock(Connection.class);
-            PowerMockito.mockStatic(JDBCUtil.class);
-            PowerMockito.when(JDBCUtil.createConnection("",
+            Connection c = mock(Connection.class);
+            mockStatic(JDBCUtil.class);
+            when(createConnection("",
                     "",
                     "")).thenReturn(c);
-            Assert.assertNotNull(JDBCUtil.createConnection("", "", ""));
+            assertNotNull(createConnection("", "", ""));
         } catch (SQLException ex) {
         }
     }
