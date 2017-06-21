@@ -1,3 +1,11 @@
+machine:
+  environment:
+    COVERALLS_REPO_TOKEN: zAfFG9zmPIs9LqP2nTOAJsqgHEFQHNtbl
+    COVERALLS_PARALLEL: true
+
+notify:
+  webhooks:
+    - url: https://coveralls.io/webhook?repo_token=zAfFG9zmPIs9LqP2nTOAJsqgHEFQHNtbl>
 dependencies:
   override:
     - mvn -DskipTests clean install
